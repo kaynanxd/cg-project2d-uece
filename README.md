@@ -1,0 +1,1 @@
+# Para Executar o projeto é necessario instalar o uv e rodar "UV SYNC"

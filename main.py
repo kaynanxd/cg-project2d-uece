@@ -1,6 +1,5 @@
-def main():
-    print("Hello from cg-project2d-uece!")
-
+from src.game.engine import Engine
 
 if __name__ == "__main__":
-    main()
+    app = Engine(width=1024, height=768)
+    app.run()

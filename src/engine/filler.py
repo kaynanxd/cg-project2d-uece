@@ -182,3 +182,15 @@ class Filler:
             for i in range(0, len(intersections), 2):
                 if i + 1 < len(intersections):
                     self.renderer.draw_line(target, intersections[i], y, intersections[i+1], y, cor_atual)
+
+                
+    def draw_image_manual(self, target, texture_matrix, start_x, start_y, tex_w, tex_h):
+        """
+        Desenha uma imagem manualmente percorrendo sua matriz numérica 
+        e aplicando set_pixel para cada ponto.
+        """
+        for x in range(tex_w):
+            for y in range(tex_h):
+                color = texture_matrix[x][y]
+                if len(color) > 3 and color[3] > 10:
+                    self.renderer.set_pixel(target, start_x + x, start_y + y, color)

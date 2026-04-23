@@ -53,3 +53,25 @@ class Matrix3x3:
         m = Matrix3x3.translation(-Wxmin, -Wymin)
         m = Matrix3x3.multiply(Matrix3x3.scale(sx, sy), m)
         return Matrix3x3.multiply(Matrix3x3.translation(Vxmin, Vymax), m)
+    
+    @staticmethod
+    def scale_image_matrix(matrix, width, height, scale_factor):
+        """
+        Redimensiona uma matriz numérica de pixels manualmente.
+        Usa o conceito de mapeamento inverso para garantir que todos os pixels
+        da nova matriz sejam preenchidos corretamente.
+        """
+        new_w = int(width * scale_factor)
+        new_h = int(height * scale_factor)
+        
+        new_matrix = [[(0, 0, 0, 0) for _ in range(new_h)] for _ in range(new_w)]
+        
+        for x in range(new_w):
+            for y in range(new_h):
+                orig_x = int(x / scale_factor)
+                orig_y = int(y / scale_factor)
+                
+                if orig_x < width and orig_y < height:
+                    new_matrix[x][y] = matrix[orig_x][orig_y]
+                    
+        return new_matrix, new_w, new_h

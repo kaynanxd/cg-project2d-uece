@@ -55,7 +55,13 @@ class MainMenu:
             self.filler.scanline_fill(px_array, pontos_btn, cor_atual) #
             for j in range(4):
                 p1, p2 = pontos_btn[j], pontos_btn[(j+1)%4]
-                self.renderer.draw_line(px_array, p1[0], p1[1], p2[0], p2[1], self.COR_BORDA) #
+                
+                # REQUISITO G: Aplicando Cohen-Sutherland antes de rasterizar
+                aceito, nx0, ny0, nx1, ny1 = self.engine.clipping.cohen_sutherland(
+                    p1[0], p1[1], p2[0], p2[1]
+                )
+                if aceito:
+                    self.renderer.draw_line(px_array, nx0, ny0, nx1, ny1, self.COR_BORDA)
 
     def draw_labels(self):
         texto_logo = self.fonte_logo.render("MEU JOGO", True, self.COR_TEXTO)

@@ -3,9 +3,11 @@ from src.engine.renderer import Renderer
 from src.engine.filler import Filler
 from src.game.menu import MainMenu 
 from src.game.splashscreen import SplashScreen
+from src.engine.clipping import Clipping
 
 class Engine:
     def __init__(self, width, height):
+        self.clipping = Clipping(0, 0, width, height)
         pygame.init()
         pygame.mixer.init()
         # Música de fundo

@@ -3,6 +3,7 @@ from src.game.card import Card
 from src.game.logic.deck import Deck
 from src.game.logic.card_layout import CardLayout
 from src.game.logic.game_state import GameState
+from src.game.logic.timer import Timer
 
 class CardContainer:
     def __init__(self, engine):
@@ -15,6 +16,8 @@ class CardContainer:
         deck = Deck(PROFESSORS)
         layout = CardLayout(deck.size, card_w, card_h, gap, self.renderer.width, self.renderer.height)
         self.game_state = GameState(pairs_total=len(PROFESSORS), tries=3)
+        self.timer = Timer()
+        self._first_card_id: int | None = None
 
         self.cards = [
             Card(
@@ -28,17 +31,22 @@ class CardContainer:
             for i in range(deck.size)
         ]
 
-    def __set_state(self, label: str):
+    def __set_state(self, card_id: int, label: str):
+        if self._first_card_id == card_id:
+            return
         result = self.game_state.select(label)
         if result is None:
+            self._first_card_id = card_id
             return
+        self._first_card_id = None
         if result.matched:
             self.cards = [card for card in self.cards if card.get_label() != result.label]
 
         print(self.game_state.tries)
         print(f"{self.game_state.pairs_matched}/{self.game_state.pairs_total}")
 
-    def update(self):
+    def update(self, delta_ms: int) -> None:
+        self.timer.update(delta_ms)
         for card in self.cards:
             card.update()
 

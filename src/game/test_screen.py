@@ -14,5 +14,5 @@ class TestScreen:
     def draw_ui(self):
         self.container.draw_ui()
 
-    def update(self):
-        self.container.update()
+    def update(self, delta_ms: int) -> None:
+        self.container.update(delta_ms)

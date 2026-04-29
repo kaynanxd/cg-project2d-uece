@@ -98,4 +98,6 @@ class Engine:
 
 
             pygame.display.flip()
-            self.clock.tick(60)
+            delta_ms = self.clock.tick(60)
+            if self.state == "TEST":
+                self.test_screen.update(delta_ms)

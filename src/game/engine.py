@@ -4,6 +4,7 @@ from src.engine.filler import Filler
 from src.game.menu import MainMenu 
 from src.game.splashscreen import SplashScreen
 from src.engine.clipping import Clipping
+from src.game.test_screen import TestScreen
 
 class Engine:
     def __init__(self, width, height):
@@ -31,9 +32,10 @@ class Engine:
         self.menu_bg_cache = pygame.Surface((width, height))
         self.bg_rendered = False
         
-        self.state = "SPLASH"
+        self.state = "TEST"
         self.splash = SplashScreen(self)
         self.menu = MainMenu(self)
+        self.test_screen = TestScreen(self)
         self.needs_render = True 
         self.running = True
 
@@ -45,11 +47,18 @@ class Engine:
             for event in events:
                 if event.type == pygame.QUIT: self.running = False
                 if self.state == "MENU": self.menu.handle_event(event)
+                if self.state == "TEST": self.test_screen.handle_event(event)
 
             if self.state == "SPLASH": self.splash.update()
             if self.state != old_state: self.needs_render = True
 
             if self.state == "MENU":
+                current_mouse_pos = pygame.mouse.get_pos()
+                if current_mouse_pos != last_mouse_pos:
+                    self.needs_render = True
+                    last_mouse_pos = current_mouse_pos
+            
+            if self.state == "TEST":
                 current_mouse_pos = pygame.mouse.get_pos()
                 if current_mouse_pos != last_mouse_pos:
                     self.needs_render = True
@@ -74,6 +83,11 @@ class Engine:
                     px = pygame.PixelArray(self.screen)
                     self.menu.draw(px)
                     px.close()
+                elif self.state == "TEST":
+                    px = pygame.PixelArray(self.screen)
+                    self.test_screen.draw(px)
+                    px.close()
+                    self.test_screen.draw_ui()
                     
                 if self.state == "MENU":
                     self.menu.draw_labels()

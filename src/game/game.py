@@ -5,7 +5,7 @@ from src.game.logic.card_layout import CardLayout
 from src.game.logic.game_state import GameState
 from src.game.logic.timer import Timer
 
-class CardContainer:
+class Game:
     def __init__(self, engine):
         self.engine = engine
         self.renderer = engine.renderer
@@ -44,6 +44,7 @@ class CardContainer:
 
         print(self.game_state.tries)
         print(f"{self.game_state.pairs_matched}/{self.game_state.pairs_total}")
+        print(f"tempo: {self.timer.elapsed_seconds():.1f}s")
 
     def update(self, delta_ms: int) -> None:
         self.timer.update(delta_ms)

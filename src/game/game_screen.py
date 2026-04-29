@@ -1,9 +1,9 @@
-from src.game.card_container import CardContainer
+from src.game.game import Game
 
-class TestScreen:
+class GameScreen:
     def __init__(self, engine):
         self.engine = engine
-        self.container = CardContainer(engine)
+        self.container = Game(engine)
 
     def handle_event(self, event):
         self.container.handle_event(event)

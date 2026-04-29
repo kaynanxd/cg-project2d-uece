@@ -4,7 +4,7 @@ from src.engine.filler import Filler
 from src.game.menu import MainMenu 
 from src.game.splashscreen import SplashScreen
 from src.engine.clipping import Clipping
-from src.game.test_screen import TestScreen
+from src.game.game_screen import GameScreen
 
 class Engine:
     def __init__(self, width, height):
@@ -35,7 +35,7 @@ class Engine:
         self.state = "TEST"
         self.splash = SplashScreen(self)
         self.menu = MainMenu(self)
-        self.test_screen = TestScreen(self)
+        self.game_screen = GameScreen(self)
         self.needs_render = True 
         self.running = True
 
@@ -47,7 +47,7 @@ class Engine:
             for event in events:
                 if event.type == pygame.QUIT: self.running = False
                 if self.state == "MENU": self.menu.handle_event(event)
-                if self.state == "TEST": self.test_screen.handle_event(event)
+                if self.state == "TEST": self.game_screen.handle_event(event)
 
             if self.state == "SPLASH": self.splash.update()
             if self.state != old_state: self.needs_render = True
@@ -85,9 +85,9 @@ class Engine:
                     px.close()
                 elif self.state == "TEST":
                     px = pygame.PixelArray(self.screen)
-                    self.test_screen.draw(px)
+                    self.game_screen.draw(px)
                     px.close()
-                    self.test_screen.draw_ui()
+                    self.game_screen.draw_ui()
                     
                 if self.state == "MENU":
                     self.menu.draw_labels()
@@ -100,4 +100,4 @@ class Engine:
             pygame.display.flip()
             delta_ms = self.clock.tick(60)
             if self.state == "TEST":
-                self.test_screen.update(delta_ms)
+                self.game_screen.update(delta_ms)

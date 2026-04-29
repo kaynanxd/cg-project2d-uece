@@ -30,7 +30,7 @@ class Card:
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse = pygame.mouse.get_pos()
             if is_clicked(mouse, self.card_container):
-                self.set_state(self.label)
+                self.set_state(self.id, self.label)
     
     def draw(self, px_array):
         x, y, w, h = self.x, self.y, self.w, self.h

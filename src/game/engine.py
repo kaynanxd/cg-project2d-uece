@@ -4,6 +4,8 @@ from src.engine.filler import Filler
 from src.game.menu import MainMenu
 from src.game.splashscreen import SplashScreen
 from src.engine.clipping import Clipping
+from src.game.game_screen import GameScreen
+
 from src.engine.audio import AudioManager
  
 class Engine:
@@ -20,11 +22,15 @@ class Engine:
         self.renderer = Renderer(self.screen)
         self.filler = Filler(self.renderer)
         self.clock = pygame.time.Clock()
- 
-        self.state = "SPLASH"
+        
+        self.menu_bg_cache = pygame.Surface((width, height))
+        self.bg_rendered = False
+        
+        self.state = "TEST"
         self.splash = SplashScreen(self)
         self.menu = MainMenu(self)
-        self.needs_render = True
+        self.game_screen = GameScreen(self)
+        self.needs_render = True 
         self.running = True
  
     def run(self):
@@ -35,7 +41,8 @@ class Engine:
             for event in events:
                 if event.type == pygame.QUIT: self.running = False
                 if self.state == "MENU": self.menu.handle_event(event)
- 
+                if self.state == "TEST": self.game_screen.handle_event(event)
+
             if self.state == "SPLASH": self.splash.update()
             if self.state != old_state: self.needs_render = True
  
@@ -62,6 +69,13 @@ class Engine:
                     px = pygame.PixelArray(self.screen)
                     self.menu.draw(px)
                     px.close()
+                elif self.state == "TEST":
+                    px = pygame.PixelArray(self.screen)
+                    self.game_screen.draw(px)
+                    px.close()
+                    self.game_screen.draw_ui()
+                    
+                if self.state == "MENU":
                     self.menu.draw_labels()
  
                 self.needs_render = False
@@ -69,4 +83,6 @@ class Engine:
             if self.state == "SPLASH": self.splash.draw_ui()
  
             pygame.display.flip()
-            self.clock.tick(60)
+            delta_ms = self.clock.tick(60)
+            if self.state == "TEST":
+                self.game_screen.update(delta_ms)

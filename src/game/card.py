@@ -3,7 +3,7 @@ import pygame
 from src.engine.collision import is_clicked
 
 class Card:
-    def __init__(self, engine, x, y, id, label, set_state):
+    def __init__(self, engine, x, y, w, h, id, label, set_state):
         self.engine = engine
         self.renderer = engine.renderer
         self.filler = engine.filler
@@ -11,7 +11,7 @@ class Card:
         self.id = id
         self.label = label
         self.x, self.y = x, y 
-        self.w, self.h = 50, 100
+        self.w, self.h = w, h
         
         self.card_container = (self.x, self.y, self.w, self.h)
         self.set_state = set_state

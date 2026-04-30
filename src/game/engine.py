@@ -5,7 +5,6 @@ from src.game.menu import MainMenu
 from src.game.splashscreen import SplashScreen
 from src.engine.clipping import Clipping
 from src.game.game_screen import GameScreen
-
 from src.engine.audio import AudioManager
  
 class Engine:
@@ -26,9 +25,10 @@ class Engine:
         self.menu_bg_cache = pygame.Surface((width, height))
         self.bg_rendered = False
         
-        self.state = "TEST"
+        self.state = "SPLASH"
         self.splash = SplashScreen(self)
         self.menu = MainMenu(self)
+        self.difficulty = "EASY"
         self.game_screen = GameScreen(self)
         self.needs_render = True 
         self.running = True
@@ -41,17 +41,17 @@ class Engine:
             for event in events:
                 if event.type == pygame.QUIT: self.running = False
                 if self.state == "MENU": self.menu.handle_event(event)
-                if self.state == "TEST": self.game_screen.handle_event(event)
+                if self.state == "GAME": self.game_screen.handle_event(event)
 
             if self.state == "SPLASH": self.splash.update()
             if self.state != old_state: self.needs_render = True
  
             current_mouse_pos = pygame.mouse.get_pos()
-            if self.state == "MENU":
+            if self.state in ("GAME","MENU"):
                 self.needs_render = True 
-            elif self.state in ("TEST",) and current_mouse_pos != last_mouse_pos:
-                self.needs_render = True
-                last_mouse_pos = current_mouse_pos
+            # elif self.state in ("GAME",)and current_mouse_pos != last_mouse_pos:
+            #     self.needs_render = True
+            #     last_mouse_pos = current_mouse_pos
  
             if self.needs_render:
                 self.screen.fill((0, 0, 0))
@@ -69,10 +69,13 @@ class Engine:
                     px = pygame.PixelArray(self.screen)
                     self.menu.draw(px)
                     px.close()
-                elif self.state == "TEST":
+                elif self.state == "GAME":
                     px = pygame.PixelArray(self.screen)
                     self.game_screen.draw(px)
-                    px.close()
+                    try:
+                        px.close() 
+                    except ValueError:
+                        pass
                     self.game_screen.draw_ui()
                     
                 if self.state == "MENU":
@@ -84,5 +87,5 @@ class Engine:
  
             pygame.display.flip()
             delta_ms = self.clock.tick(60)
-            if self.state == "TEST":
+            if self.state == "GAME":
                 self.game_screen.update(delta_ms)

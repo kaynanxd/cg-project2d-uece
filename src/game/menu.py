@@ -11,7 +11,7 @@ class MainMenu:
         self.filler = engine.filler
         self.screen_width = self.renderer.width
         self.screen_height = self.renderer.height
-        self.cards = [FallingCard(self.screen_width, self.screen_height) for _ in range(10)]
+        self.cards = [FallingCard(self.screen_width, self.screen_height) for _ in range(14)]
         self.hovered_index = -1
 
         self.show_popup = False
@@ -317,14 +317,17 @@ class MainMenu:
             elif self.menu_state == "DIFFICULTY":
                 if is_clicked(mouse_pos, self.diff_rects[0]):
                     self.engine.audio.play_sfx("click")
+                    self.engine.game_screen.container = None
                     self.engine.difficulty = "EASY" 
                     self.engine.state = "GAME"
                 elif is_clicked(mouse_pos, self.diff_rects[1]): 
                     self.engine.audio.play_sfx("click")
+                    self.engine.game_screen.container = None
                     self.engine.difficulty = "MEDIUM"
                     self.engine.state = "GAME"
                 elif is_clicked(mouse_pos, self.diff_rects[2]): 
                     self.engine.audio.play_sfx("click")
+                    self.engine.game_screen.container = None
                     self.engine.difficulty = "HARD"
                     self.engine.state = "GAME"
                 elif is_clicked(mouse_pos, self.diff_rects[3]):
